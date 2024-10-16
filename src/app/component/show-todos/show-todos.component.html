@@ -1,0 +1,49 @@
+<h2>To Dos</h2>
+
+<table>
+  <thead>
+    <tr>
+      <td>Id</td>
+      <td>Titel</td>
+      <td>Fertig?</td>
+    </tr>
+  </thead>
+  <tbody>
+    @for(todo of todos; track todo.id){
+      <tr>
+        <td>{{todo.id}}</td>
+        <td>{{todo.title }}</td>
+        <td>{{todo.completed ? 'Yes' : 'No' }}</td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+<h2>Einzelnes To Do</h2>
+<div>
+  <div>Id: {{this.todo?.id}}</div>
+  <div>Title: {{this.todo?.title}}</div>
+  <div>Completed: {{this.todo?.completed}}</div>
+</div>
+
+<h2>Noch zu erledigende To Dos</h2>
+
+<table>
+  <thead>
+  <tr>
+    <td>Id</td>
+    <td>Titel</td>
+    <td>Fertig?</td>
+  </tr>
+  </thead>
+  <tbody>
+  @for(todo of todosCompletedFalse; track todo.id){
+  <tr>
+    <td>{{todo.id}}</td>
+        <td>{{todo.title }}</td>
+        <td>{{todo.completed ? 'Yes' : 'No' }}</td>
+      </tr>
+  }
+  </tbody>
+</table>
+
