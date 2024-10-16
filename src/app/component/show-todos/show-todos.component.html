@@ -20,11 +20,14 @@
 </table>
 
 <h2>Einzelnes To Do</h2>
-<div>
-  <div>Id: {{this.todo?.id}}</div>
-  <div>Title: {{this.todo?.title}}</div>
-  <div>Completed: {{this.todo?.completed}}</div>
-</div>
+  @if(this.todo$ | async as todo){
+  <div>
+    <div>Id: {{todo.id | async}}</div>
+    <div>Title: {{todo.title | async}}</div>
+    <div>Completed: {{todo.completed | async}}</div>
+  </div>
+}
+
 
 <h2>Noch zu erledigende To Dos</h2>
 
@@ -37,7 +40,7 @@
   </tr>
   </thead>
   <tbody>
-  @for(todo of todosCompletedFalse; track todo.id){
+  @for(todo of todosCompletedFalse |async; track todo.id){
   <tr>
     <td>{{todo.id}}</td>
         <td>{{todo.title }}</td>

@@ -1,32 +1,36 @@
-import {Component, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AsyncPipe, CommonModule} from '@angular/common';
 import {DataService} from '../../service/data.service';
 import {ToDo} from '../../model/to-do';
 import {HttpClient} from '@angular/common/http';
+import {Observable, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-show-todos',
   standalone: true,
-  imports: [],
+  imports: [
+    AsyncPipe
+  ],
   templateUrl: './show-todos.component.html',
   styleUrl: './show-todos.component.css'
 })
-export class ShowTodosComponent implements OnInit {
+export class ShowTodosComponent implements OnInit, OnDestroy {
   todos?: ToDo[];
-  todo?: ToDo;
-  todosCompletedFalse: ToDo[] =[];
+  todo$: Observable<ToDo>;
+  todosCompletedFalse$?: Observable<ToDo[]>;
+  private sub: Subscription;
   constructor(private dataService: DataService) {
   }
 
   ngOnInit(): void{
-    this.dataService.getTodos().subscribe((data: ToDo[]) =>{
+    this.sub = this.dataService.getTodos().subscribe((data: ToDo[]) =>{
       this.todos = data;
     });
-    this.dataService.getTodo(5).subscribe((data: ToDo) =>{
-      this.todo = data;
-    });
-    this.dataService.getTodosByCompleted().subscribe((data: ToDo[]) =>{
-      this.todosCompletedFalse = data;
-    });
+    this.todo$ = this.dataService.getTodo(5);
+    this.todosCompletedFalse$= this.dataService.getTodosByCompleted();
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 }
