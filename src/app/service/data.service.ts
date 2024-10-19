@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {HttpParams} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {filter, map, mergeMap, Observable, toArray} from 'rxjs';
 import {ToDo} from '../model/to-do';
 
 @Injectable({
@@ -14,7 +14,15 @@ export class DataService {
   constructor(private http: HttpClient) { }
 
   getTodos(): Observable<ToDo[]>{
-    return this.http.get<ToDo[]>(this.todoURL);
+    return this.http.get<ToDo[]>(this.todoURL).pipe(
+      mergeMap(todos => todos), // Alle ToDos in den Datenstrom überführen
+      filter(todo => !todo.completed), // Filtert nicht abgeschlossene ToDos
+      map(todo => ({
+        ...todo,
+        title: todo.title.toUpperCase() // Titel in Großbuchstaben umwandeln
+      })),
+      toArray() // Nach der Bearbeitung alle Items wieder zu einem Array sammeln
+    );
   }
 
   getTodo(id: number): Observable<ToDo>{
