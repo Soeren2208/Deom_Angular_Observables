@@ -16,9 +16,10 @@ import {Observable, Subscription} from 'rxjs';
 })
 export class ShowTodosComponent implements OnInit, OnDestroy {
   todos?: ToDo[];
-  todo$: Observable<ToDo>;
+  todo$!: Observable<ToDo>;
   todosCompletedFalse$?: Observable<ToDo[]>;
-  private sub: Subscription;
+  private sub: Subscription = new Subscription();
+
   constructor(private dataService: DataService) {
   }
 
